@@ -1,3 +1,4 @@
+
 const express = require("express");
 const http = require("http");
 const cors = require("cors");
@@ -12,8 +13,16 @@ app.use(express.json());
 app.use(cors());
 const server = http.createServer(app);
 
+
+mongoose
+.connect (process.env.MONGO_URI)
+.then(() => {
 server.listen(PORT, () => {
-console.log(`Server is listening on ${PORT}`);
+console.log(`Server is listening on ${PORT}`)
 });
 
-console.log("test nodemon")
+})
+.catch((err) => {
+console.log("database connection failed. Server not started");
+console.error(err);
+});

@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken")
 
 const postRegister = async (req, res) => {
     try{
+        //user input
         const {username, email, password} =req.body
         // check if user exists
         const userExists = await User.exists({ email: email.toLowerCase() });
@@ -30,7 +31,7 @@ const postRegister = async (req, res) => {
             email: user.email,
             token: token,
             username: user.username,
-            },
+            }
         })
 
 
@@ -46,3 +47,4 @@ const postRegister = async (req, res) => {
     };
 
     module.exports = postRegister
+

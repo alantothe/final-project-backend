@@ -6,11 +6,18 @@ const mongoose = require("mongoose");
 const { appendFile } = require("fs");
 require("dotenv").config();
 
+const authRoutes = require('./routes/authRoutes/authRoutes.js')
+
 const PORT = process.env.PORT || process.env.API_PORT
 
 const app = express();
 app.use(express.json());
 app.use(cors());
+
+// register the routes
+app.use("/api/auth", authRoutes);
+
+
 const server = http.createServer(app);
 
 

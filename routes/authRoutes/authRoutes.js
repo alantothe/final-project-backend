@@ -5,6 +5,7 @@ const authControllers = require("/Users/alanmalpartida/Desktop/Final_Project/fin
 const Joi = require('joi');
 const { Schema } = require('mongoose');
 const validator = require('express-joi-validation').createValidator({})
+const auth = require('/Users/alanmalpartida/Desktop/Final_Project/final-project-backend/middleware/auth.js')
 
 const registerSchema = Joi.object({
     username: Joi.string().min(3).max(12).required(),
@@ -21,5 +22,12 @@ const loginSchema = Joi.object({
 
 router.post("/register", validator.body(registerSchema), authControllers.controllers.postRegister);
 router.post("/login", validator.body(loginSchema), authControllers.controllers.postLogin);
+
+//test
+router.get("/test", auth,(req, res) =>{
+    res.send("request passed")
+
+});
+
 
 module.exports = router;

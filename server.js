@@ -3,12 +3,11 @@ const express = require("express");
 const http = require("http");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const { appendFile } = require("fs");
+
 require("dotenv").config();
 
-// import the socket server module
 const socketServer = require('./socketServer')
-// directory
+
 const authRoutes = require('./routes/authRoutes/authRoutes.js')
 
 // get the port number to listen on from the environment
@@ -46,3 +45,5 @@ mongoose
     console.log("database connection failed. Server not started");
     console.error(err);
   });
+
+

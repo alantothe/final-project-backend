@@ -1,4 +1,3 @@
-
 const connectedUsers = new Map();
 
 let io = null;
@@ -29,7 +28,6 @@ const addNewConnectedUser = ({ socketId, userID }) => {
 };
 
 
-
 const removeConnectedUser = (socketId) => {
   if (connectedUsers.has(socketId)) {
     connectedUsers.delete(socketId);
@@ -54,7 +52,7 @@ const getOnlineUsers = () => {
   const onlineUsers = [];
 
   connectedUsers.forEach((value, key) => {
-    onlineUsers.push({ socketId: key, userID: value.userID });
+    onlineUsers.push({ socketId: key, userId: value.userID });
   });
 
   return onlineUsers;

@@ -8,7 +8,7 @@ const registerSocketServer = (server) => {
   const io = require("socket.io")(server, {
     cors: {
       origin: "*",
-      methods: ["GET", "POST"],
+      methods: ["GET", "POST", "PUT", "DELETE"],
     },
   });
 
@@ -19,9 +19,13 @@ const registerSocketServer = (server) => {
   });
 
   const emitOnlineUsers = () => {
+    // log the value of the onlineUsers array
+    console.log(serverStore.getOnlineUsers());
+
     const onlineUsers = serverStore.getOnlineUsers();
     io.emit("online-users", { onlineUsers });
   };
+
 
   io.on("connection", (socket) => {
     console.log("user connected");

@@ -1,60 +1,53 @@
-const User = require('../../models/user');
+const User = require("../../models/user");
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken")
-
+const jwt = require("jsonwebtoken");
 
 const postRegister = async (req, res) => {
-    try{
-        //user input
-        const {username, email, password} =req.body
-        // check if user exists
-        const userExists = await User.exists({ email: email.toLowerCase() });
-        if (userExists) {
-        return res.status (409).send("E-mail already in use.");
-        }
-        // encrypt password
-        const encryptedPassword = await bcrypt.hash(password, 10);
+  try {
+    const { username, email, password } = req.body;
 
-        // create user and save to mongoDB
+    console.log("user register request came");
+    // check if user exists
+    const userExists = await User.exists({ email: email.toLowerCase() });
 
-        const user = await User.create({
-            username,
-            email: email.toLowerCase(),
-            password: encryptedPassword
-        })
+    console.log(userExists);
 
-        //create JWT token
-        const token = jwt.sign(
-            {
-                userID: user._id,
-                email
-            },
-            process.env.TOKEN_KEY,
-            {
-                expiresIn: '1h'
-            }
-
-        )
-
-        res.status (201).json({
-            userDetails: {
-            email: user.email,
-            token: token,
-            username: user.username,
-            }
-        })
-
-
-
-
-
-
-
+    if (userExists) {
+      return res.status(409).send("E-email already in use.");
     }
-    catch (err){
-        return res.status(500).send("Error, Please try again")
-    }
-    };
 
-    module.exports = postRegister
+    // encrypt password
+    const encryptedPassword = await bcrypt.hash(password, 10);
 
+    // create user document and save in database
+    const user = await User.create({
+      username,
+      email: email.toLowerCase(),
+      password: encryptedPassword,
+    });
+
+    // create JWT token
+    const token = jwt.sign(
+      {
+        userID: user._id,
+        email,
+      },
+      process.env.TOKEN_KEY,
+      {
+        expiresIn: "24h",
+      }
+    );
+
+    res.status(201).json({
+      userDetails: {
+        email: user.email,
+        token: token,
+        username: user.username,
+      },
+    });
+  } catch (err) {
+    return res.status(500).send("Error occured. Please try again");
+  }
+};
+
+module.exports = postRegister;

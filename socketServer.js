@@ -1,7 +1,8 @@
 const authSocket = require("./middleware/authSocket");
 const newConnectionHandler = require("./socketHandlers/newConnectionHandler");
 const disconnectHandler = require("./socketHandlers/disconnectHandler");
-
+const directMessageHandler = require("./socketHandlers/directMessageHandler");
+const directChatHistoryHandler = require("./socketHandlers/directChatHistoryHandler");
 const serverStore = require("./serverStore");
 
 const registerSocketServer = (server) => {
@@ -21,7 +22,6 @@ const registerSocketServer = (server) => {
   const emitOnlineUsers = () => {
     // log the value of the onlineUsers array
     console.log(serverStore.getOnlineUsers());
-
     const onlineUsers = serverStore.getOnlineUsers();
     io.emit("online-users", { onlineUsers });
   };
@@ -33,6 +33,14 @@ const registerSocketServer = (server) => {
 
     newConnectionHandler(socket, io);
     emitOnlineUsers();
+
+    socket.on("direct-message", (data) => {
+      directMessageHandler(socket, data);
+    });
+
+    socket.on("direct-chat-history", (data) => {
+      directChatHistoryHandler(socket, data);
+    });
 
     socket.on("disconnect", () => {
       disconnectHandler(socket);
